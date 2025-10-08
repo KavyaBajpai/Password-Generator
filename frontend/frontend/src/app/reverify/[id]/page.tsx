@@ -7,7 +7,7 @@ import { verifyAndDelete } from "@/utils/api";
 
 export default function ReverifyPage() {
   const router = useRouter();
-  const { id } = useParams(); // ✅ get the vaultId from URL
+  const { id } = useParams(); // get the vaultId from URL
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,7 +27,7 @@ export default function ReverifyPage() {
     } else {
       setError(res.message || "Verification failed");
     }
-  } catch (err: any) {
+  } catch (err) {
     setError("Invalid password or action failed");
     console.error(err);
   } finally {
