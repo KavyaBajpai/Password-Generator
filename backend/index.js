@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 connectDB();
 

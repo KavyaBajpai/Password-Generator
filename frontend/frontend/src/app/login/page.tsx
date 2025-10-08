@@ -35,7 +35,7 @@ export default function LoginPage() {
       } else {
         setError("Invalid login response");
       }
-    } catch (err: any) {
+    } catch (err) {
       setError("Invalid credentials or server error");
       console.error("Login error:", err);
     }

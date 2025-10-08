@@ -51,7 +51,7 @@ export default function SignupPage() {
       } else {
         setError(res.message || "Signup failed. Try again.");
       }
-    } catch (err: any) {
+    } catch (err) {
       setError("Something went wrong. Please try again.");
       console.error("Signup error:", err);
     }

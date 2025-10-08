@@ -41,7 +41,7 @@ if (keyHex && newPassword) {
     } else {
       setError(res.message || "Verification failed");
     }
-  } catch (err: any) {
+  } catch (err) {
     setError("Invalid password or action failed");
     console.error(err);
   } finally {

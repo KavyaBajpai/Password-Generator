@@ -6,17 +6,17 @@ const api = axios.create({
 
 // AUTH APIS 
 export const signupUser = async (name: string, email: string, password: string) => {
-  const res = await api.post("/auth/signup", { name, email, password });
+  const res = await api.post("/api/auth/signup", { name, email, password });
   return res.data;
 };
 
 export const loginUser = async (email: string, password: string) => {
-  const res = await api.post("/auth/login", { email, password });
+  const res = await api.post("/api/auth/login", { email, password });
   return res.data; // { token, user }
 };
 
 export const verifyAndDelete = async (token: string, id:string, password: string) => {
-   const res = await api.post(`/auth/reverify-delete/${id}`,
+   const res = await api.post(`/api/auth/reverify-delete/${id}`,
     {
        password
     } ,
@@ -29,7 +29,7 @@ export const verifyAndDelete = async (token: string, id:string, password: string
 }
 
 export const verifyAndEdit = async (token: string, id:string, password: string, newSiteName: string, newPassword: string) => {
-   const res = await api.patch(`/auth/reverify-edit/${id}`,
+   const res = await api.patch(`/api/auth/reverify-edit/${id}`,
     {
        password, newSiteName, newPassword
     } ,
@@ -43,7 +43,7 @@ export const verifyAndEdit = async (token: string, id:string, password: string, 
 
 //  VAULT APIS 
 export const getVaultItems = async (token: string) => {
-  const res = await api.get("/vault/get", 
+  const res = await api.get("/api/vault/get", 
     {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -52,7 +52,7 @@ export const getVaultItems = async (token: string) => {
 
 export const addVaultItem = async (token: string, siteName: string, password: string) => {
   const res = await api.post(
-    "/vault/add",
+    "/api/vault/add",
     { siteName, password: password },
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -62,7 +62,7 @@ export const addVaultItem = async (token: string, siteName: string, password: st
 };
 
 export const deleteVaultItem = async (token: string, id: string) => {
-  const res = await api.delete(`/vault/delete/${id}`, {
+  const res = await api.delete(`/api/vault/delete/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
