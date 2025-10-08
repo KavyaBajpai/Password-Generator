@@ -11,7 +11,7 @@ export default function AddPasswordPage() {
   const [siteName, setSiteName] = useState("");
   const [password, setPassword] = useState("");
   const [vault, setVault] = useState([]);
-  const [length, setLength] = useState(16); // ✅ Slider state for password length
+  const [length, setLength] = useState(16); // Slider state for password length
   const { token, keyHex } = useAuth();
 
   const handleGenerate = () => {

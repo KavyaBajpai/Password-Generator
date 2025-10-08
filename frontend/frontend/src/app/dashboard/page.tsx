@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import { getVaultItems, addVaultItem, deleteVaultItem } from "@/utils/api";
+import { getVaultItems } from "@/utils/api";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext"; 
-import { encryptAES, decryptAES } from "@/utils/cryptoUtil"; 
+import { useAuth } from "@/context/AuthContext";
+import { decryptAES } from "@/utils/cryptoUtil";
 
 interface VaultItem {
   _id: string;
@@ -16,14 +16,11 @@ interface VaultItem {
 
 export default function DashboardPage() {
   const [vault, setVault] = useState<VaultItem[]>([]);
-  const [siteName, setSiteName] = useState("");
-  const [password, setPassword] = useState("");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { token, keyHex } = useAuth();
 
-  const { token, keyHex } = useAuth(); 
-
-  
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
@@ -39,50 +36,21 @@ export default function DashboardPage() {
     fetchData();
   }, [token]);
 
-  // Add password
-  // const handleAdd = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!siteName || !password) return;
-  //   if (!token) return alert("Please log in again");
-  //   if (!keyHex) return alert("Unlock your vault first");
-
-  //   try {
-     
-  //     const encrypted = encryptAES(password, keyHex);
-
-  //     await addVaultItem(token, siteName, encrypted);
-
-  //     setSiteName("");
-  //     setPassword("");
-
-      
-  //     const updated = await getVaultItems(token);
-  //     setVault(Array.isArray(updated) ? updated : updated.vault || []);
-  //   } catch (err) {
-  //     console.error("Error adding password:", err);
-  //   }
-  // };
-
-  const handleAdd = async (e: React.FormEvent) => {
-    router.push('/add');
-  }
-
-  // Delete password
-  const handleDelete = async (id: string) => {
-    try {
-      router.push(`/reverify/${id}`);
-    } catch (err) {
-      console.error("Error deleting item:", err);
-    }
+  const handleAdd = () => {
+    router.push("/add");
   };
 
-  const handleEdit = async (id: string) => {
-    try {
-      router.push(`/reverifyEdit/${id}`);
-    } catch (err) {
-      console.error("Error editing item:", err);
-    }
+  const handleDelete = (id: string) => {
+    router.push(`/reverify/${id}`);
   };
+
+  const handleEdit = (id: string) => {
+    router.push(`/reverifyEdit/${id}`);
+  };
+
+  const filteredVault = vault.filter((item) =>
+    item.siteName.toLowerCase().includes(search.toLowerCase())
+  );
 
   if (loading)
     return (
@@ -100,39 +68,26 @@ export default function DashboardPage() {
           Your Vault
         </h1>
 
-        {/* Add Password Form */}
-        {/* <form
-          onSubmit={handleAdd}
-          className="flex flex-col md:flex-row gap-4 mb-8 bg-gray-900 p-4 rounded-lg"
-        >
+        {/* Search Bar + Add Button */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
           <input
             type="text"
-            placeholder="Site name"
-            value={siteName}
-            onChange={(e) => setSiteName(e.target.value)}
-            className="flex-1 p-2 rounded bg-black border border-gray-700 focus:border-green-400 focus:outline-none text-gray-200"
-          />
-          <input
-            type="text"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="flex-1 p-2 rounded bg-black border border-gray-700 focus:border-green-400 focus:outline-none text-gray-200"
+            placeholder="Search by site name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 p-2 rounded bg-gray-900 border border-gray-700 focus:border-green-400 focus:outline-none text-gray-200 placeholder-gray-500"
           />
           <button
-            type="submit"
-            className="bg-green-500 hover:bg-green-600 text-black font-semibold px-4 py-2 rounded transition"
+            onClick={handleAdd}
+            className="px-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition w-full md:w-auto"
           >
-            Add
+            + Add
           </button>
-        </form> */}
-        <div className="mb-4">
-          <button onClick={handleAdd} className="px-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition">+Add</button>
         </div>
 
         {/* Vault Table */}
-        {vault.length === 0 ? (
-          <p className="text-gray-500">No passwords saved yet.</p>
+        {filteredVault.length === 0 ? (
+          <p className="text-gray-500">No matching passwords found.</p>
         ) : (
           <table className="w-full border-collapse">
             <thead>
@@ -143,11 +98,10 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {vault.map((item) => (
+              {filteredVault.map((item) => (
                 <tr key={item._id} className="border-b border-gray-800">
                   <td className="py-2">{item.siteName}</td>
                   <td className="py-2 text-gray-300">
-                 
                     {keyHex
                       ? decryptAES(item.hashedPassword, keyHex)
                       : "••••••"}
@@ -175,5 +129,3 @@ export default function DashboardPage() {
     </main>
   );
 }
-
-
