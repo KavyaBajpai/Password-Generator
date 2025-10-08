@@ -19,20 +19,20 @@ export default function SignupPage() {
     setError("");
     setSuccess("");
 
-    // ✅ 1. Basic empty field check
+    
     if (!name || !email || !password) {
       setError("All fields are required.");
       return;
     }
 
-    // ✅ 2. Email format check
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
 
-    // ✅ 3. Password strength check
+    
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(password)) {
@@ -42,7 +42,7 @@ export default function SignupPage() {
       return;
     }
 
-    // ✅ 4. Call backend if validation passes
+    
     try {
       const res = await signupUser(name, email, password);
       if (res.success) {
