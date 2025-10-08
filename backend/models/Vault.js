@@ -13,7 +13,7 @@ const vaultSchema = new mongoose.Schema(
     },
     hashedPassword: {
       type: String,
-      required: true,  // store encrypted password (AES) or hashed if client-side
+      required: true,  
     },
     createdAt: {
       type: Date,

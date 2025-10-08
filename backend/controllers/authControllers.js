@@ -86,7 +86,7 @@ export const login = async (req, res) => {
 export const reverifyAndDelete = async (req, res) => {
   const userId = req.user.id;
   const { password } = req.body;
-  const { id } = req.params; // ✅ vault id from URL param
+  const { id } = req.params; 
   console.log("id of password: ", id);
   try {
     const user = await User.findById(userId);
