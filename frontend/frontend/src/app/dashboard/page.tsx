@@ -40,28 +40,32 @@ export default function DashboardPage() {
   }, [token]);
 
   // Add password
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!siteName || !password) return;
-    if (!token) return alert("Please log in again");
-    if (!keyHex) return alert("Unlock your vault first");
+  // const handleAdd = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!siteName || !password) return;
+  //   if (!token) return alert("Please log in again");
+  //   if (!keyHex) return alert("Unlock your vault first");
 
-    try {
+  //   try {
      
-      const encrypted = encryptAES(password, keyHex);
+  //     const encrypted = encryptAES(password, keyHex);
 
-      await addVaultItem(token, siteName, encrypted);
+  //     await addVaultItem(token, siteName, encrypted);
 
-      setSiteName("");
-      setPassword("");
+  //     setSiteName("");
+  //     setPassword("");
 
       
-      const updated = await getVaultItems(token);
-      setVault(Array.isArray(updated) ? updated : updated.vault || []);
-    } catch (err) {
-      console.error("Error adding password:", err);
-    }
-  };
+  //     const updated = await getVaultItems(token);
+  //     setVault(Array.isArray(updated) ? updated : updated.vault || []);
+  //   } catch (err) {
+  //     console.error("Error adding password:", err);
+  //   }
+  // };
+
+  const handleAdd = async (e: React.FormEvent) => {
+    router.push('/add');
+  }
 
   // Delete password
   const handleDelete = async (id: string) => {
@@ -97,7 +101,7 @@ export default function DashboardPage() {
         </h1>
 
         {/* Add Password Form */}
-        <form
+        {/* <form
           onSubmit={handleAdd}
           className="flex flex-col md:flex-row gap-4 mb-8 bg-gray-900 p-4 rounded-lg"
         >
@@ -121,7 +125,10 @@ export default function DashboardPage() {
           >
             Add
           </button>
-        </form>
+        </form> */}
+        <div className="mb-4">
+          <button onClick={handleAdd} className="px-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition">+Add</button>
+        </div>
 
         {/* Vault Table */}
         {vault.length === 0 ? (

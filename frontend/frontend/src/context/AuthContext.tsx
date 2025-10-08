@@ -17,15 +17,14 @@ const AuthContext = createContext<AuthState>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // ✅ Token is still persistent (localStorage)
+  //  Token is still persistent (localStorage)
   const [token, setToken] = useState<string | null>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("token") || null;
     }
     return null;
   });
-
-  // ✅ keyHex restored from sessionStorage (survives reloads but not tab close)
+  //  keyHex restored from sessionStorage (survives reloads but not tab close)
   const [keyHex, setKeyHex] = useState<string | null>(() => {
     if (typeof window !== "undefined") {
       return sessionStorage.getItem("keyHex") || null;
