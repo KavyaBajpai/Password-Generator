@@ -11,12 +11,24 @@ export default function AddPasswordPage() {
   const [siteName, setSiteName] = useState("");
   const [password, setPassword] = useState("");
   const [vault, setVault] = useState([]);
-  const [length, setLength] = useState(16); // Slider state for password length
+  const [length, setLength] = useState(16);
+  const [copied, setCopied] = useState(false); 
   const { token, keyHex } = useAuth();
 
   const handleGenerate = () => {
     const newPass = generateStrongPassword(length);
     setPassword(newPass);
+  };
+
+  const handleCopy = async () => {
+    if (!password) return;
+    try {
+      await navigator.clipboard.writeText(password);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); 
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   };
 
   const handleAdd = async (e: React.FormEvent) => {
@@ -81,12 +93,28 @@ export default function AddPasswordPage() {
                 placeholder="Enter or generate password"
                 className="flex-1 p-2 rounded bg-black border border-gray-700 focus:border-green-400 focus:outline-none text-gray-200"
               />
+
+              {/* Generate Button */}
               <button
                 type="button"
                 onClick={handleGenerate}
                 className="bg-green-500 hover:bg-green-600 text-black font-semibold px-3 py-2 rounded transition"
               >
                 Generate
+              </button>
+
+              {/* Copy Button */}
+              <button
+                type="button"
+                onClick={handleCopy}
+                disabled={!password}
+                className={`${
+                  copied
+                    ? "bg-green-700"
+                    : "bg-gray-700 hover:bg-gray-600"
+                } text-white font-medium px-3 py-2 rounded transition`}
+              >
+                {copied ? "Copied!" : "Copy"}
               </button>
             </div>
           </div>
