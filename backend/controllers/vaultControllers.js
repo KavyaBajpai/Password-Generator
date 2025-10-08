@@ -2,17 +2,18 @@ import User from "../models/User.js";
 import VaultItem from "../models/Vault.js";
 
 export const addVaultItem = async (req, res) => {
-    const { userId, name, email } = req.user;
+    const { id, name, email } = req.user;
+    console.log(id)
 
     try {
         const { siteName, password } = req.body;
         if (!siteName || !password)
-            return res.status.json({ message: "All fields required." });
+            return res.status(401).json({ message: "All fields required." });
         const newItem = await VaultItem.create({
-            userId,
-            siteName,
-            hashedPassword,
-            createdAt
+            userId: id,
+            siteName: siteName,
+            hashedPassword: password,
+            createdAt: new Date()
         });
 
         return res.status(201).json({
@@ -21,8 +22,8 @@ export const addVaultItem = async (req, res) => {
         });
     }
     catch (error) {
-         console.error("Error adding vault item:", err);
-        return res.status(500).json({ message: "Server error", deatils: err.message });
+         console.error("Error adding vault item:", error);
+        return res.status(500).json({ message: "Server error", deatils: error.message });
     }
 }
 
@@ -31,7 +32,7 @@ export const getVaultItems = async (req, res) => {
   try {
     const userId = req.user.id;
     const items = await VaultItem.find({ userId }).sort({ createdAt: -1 });
-    return res.status(201).json({message: "Passowrds fetched successfully.", items});
+    return res.status(201).json({message: "Passowrds fetched successfully.", vault:items});
   } 
   catch (err) {
     console.error("Error fetching vault items:", err);

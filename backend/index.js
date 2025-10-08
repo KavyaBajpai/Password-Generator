@@ -19,7 +19,7 @@ connectDB();
 
 //api-endpoints
 app.use('/api/auth', authRouter);
-app.use('api/vault', vaultRouter);
+app.use('/api/vault', vaultRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
